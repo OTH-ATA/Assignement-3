@@ -1,0 +1,335 @@
+/*Othmane Atanane - Yassir Benadellah*/
+/*Assignement 3*/
+husband(ziad, husband).
+wife(kawtar, wife).
+father(jawad, father).
+mother(salma, mother).
+son(ayoub, son).
+daughter(rita, daughter).
+son2(amine, sonOfson).
+son3(mouloud, sonOfsonOfson).
+father2(mimoun, fatheroffather).
+daughterofson2(fadwa, daughterOfsonOfson).
+fatherofthemother(houssine, fatherOfmother).
+motherofthemother(jalila, motherOfmother).
+sonofthedaughter(hassan, sonOfdaughter).
+sisterfrombothparents(latifa, sisterfrombothparents).
+brotherfrombothparents(hmad, brotherfrombothparents).
+psis(zakia, parentalsister).
+pbro(moussaab, parentalBrother).
+msis(hachoum, maternalSister).
+mbro(amjad, maternalBrother).
+
+
+cd(N):- aggregate_all(count, daughter(_, daughter), N).
+cs(N):- aggregate_all(count, son(_, son), N).
+css(N):- aggregate_all(count, son2(_, son2), N).
+csd(N):- aggregate_all(count, sonofthedaughter(_, sonofthedaughter), N).
+cssd(N):- aggregate_all(count, daughterofson2(_, daughterofson2), N).
+csss(N):- aggregate_all(count, son3(_, son3), N).
+cc(N):- cd(A), cs(Z),
+css(E), csd(R), cssd(T),
+csss(Y), N is (A+Z+E+R+T+Y).
+csbp(N):- aggregate_all(count, sisterfrombothparents(_, sisterfrombothparents), N).
+cpsiss(N):- aggregate_all(count, psis(_, psis), N).
+cb2p(N):- aggregate_all(count, brotherfrombothparents(_, brotherfrombothparents), N).
+cpbros(N):- aggregate_all(count, pbro(_, pbro), N).
+cmbros(N):- aggregate_all(count, mbro(_, mbro), N).
+cmsiss(N):- aggregate_all(count, msis(_, msis), N).
+ch(N):- aggregate_all(count, husband(_, husband), N).
+cf(N):- aggregate_all(count, father(_, father), N).
+cw(N):- aggregate_all(count, wife(_, wife), N).
+cm(N):- aggregate_all(count, mother(_, mother), N).
+cff(N):- aggregate_all(count, father2(_, father2), N).
+cfm(N):- aggregate_all(count, fatherofthemother(_, fatherofthemother), N).
+cmmm(N):- aggregate_all(count, motherofthemother(_, motherofthemother), N).
+csi(N):- csbp(S), cpsiss(PS),
+cb2p(B), cpbros(PB), N is (   S+PS+B+PB).
+cms(N):- cmbros(MB), cmsiss(MS),
+N is MB+MS.
+:- use_module(library(clpr)).
+:- use_module(library(clpr)).
+
+sharesTwoTimesNtoOneTimesNDistributer(Share, Mshare, Femshare,Nm,Nf) :-
+Nm==1, Nf==1 -> Mshare = Share*2/3, Femshare = Share*1/3;
+(Nm==1, Nf==2->   Mshare = Share*2/4, Femshare = Share*1/4;
+(Nm==2, Nf==2 ->   Mshare = Share*2/6, Femshare = Share*1/6;
+(Nm==3, Nf==1 -> Mshare = Share*2/7, Femshare = Share*1/7;
+(Nm==3, Nf==2 -> Mshare = Share*2/8, Femshare = Share*1/8;
+(Nm==3, Nf==3 -> Mshare = Share*2/9, Femshare = Share*1/9;
+(Nm==4, Nf==1 -> Mshare = Share*2/9, Femshare = Share*1/9;
+(Nm==4, Nf==2-> Mshare = Share*2/10, Femshare = Share*1/10;
+(Nm==4, Nf==3 -> Mshare = Share*2/11, Femshare = Share*1/11;
+(Nm==4, Nf==4, Mshare = Share*2/12, Femshare = Share*1/12;
+(Nm==2, Nf==1->   Mshare = Share*2/5, Femshare = Share*1/5;    
+ true)))))))))).
+hwnc(L) :- ch(H), H==1->   findall((X,Y,1/2),( husband(X,Y)), L), write(L) ;  true.
+hwc(L) :- ch(H), H==1-> findall((X,Y,1/4),( husband(X,Y)), L) , write(L);  true.
+wwnc(L) :- cw(W), W==1->   findall((X,Y,1/4),( wife(X,Y)), L), write(L) ;  true.
+wwc(L) :- cw(W), W==1->  findall((X,Y,1/8),( wife(X,Y)), L),  write(L); true.
+dwns(L) :- cd(N), M=2/(3*N),N>=2 -> findall((X,Y,M),( daughter(X,Y)), L),  write(L);
+(cd(N), N==1-> findall((X,Y,1/2),( daughter(X,Y)), L),  write(L); true).
+sdwsdss(L):- csd(N), M= 2/(3*N), N>=2 -> findall((X,Y,M),( sonofthedaughter(X,Y)), L),  write(L);
+(csd(N), N==1-> findall((X,Y ,1/2),( sonofthedaughter(X,Y)), L),  write(L); 
+true).
+sonofthedaughterWithoutDaughterOnly(L):-  csd(N), N==1-> findall((X,Y,1/6),( sonofthedaughter(X,Y)), L),  write(L);
+true.
+sSDwithoutSDSSSDSSS(L):-
+cssd(N),C is 3*N ,M = 2/C, N>=2 -> findall((X,Y,M), ( daughterofson2(X,Y)), L),  write(L);
+(     cssd(N), N==1 -> findall((X,Y,1/2),( daughterofson2(X,Y)), L),  write(L) ;
+true).
+sSDwithDaughterOrsonofthedaughter(L):-  cssd(N), N==1 ->
+findall((X,Y,1/6),( daughterofson2(X,Y)), L),  write(L);  
+    (    cssd(N), M=1/(6*N),N>=2 -> findall((X,Y,M),( daughterofson2(X,Y)), L),  write(L);
+true ).
+fatherWithChildren(L):-cf(F), F==1->    findall((X,Y,1/6),( father(X,Y)), L),  write(L);    
+true.
+motherWithChildrenOrSiblingsOrHusbandplusFather(L):-cm(M), M==1-> findall((X,Y,1/6),( mother(X,Y)), L),  write(L); true.
+motherWithWifePlusFather(L):-cm(M), M==1-> findall((X,Y,1/4),( mother(X,Y)), L),  write(L); true.
+motherThirdCase(L):-cm(M), M==1->  findall((X,Y,1/3),( mother(X,Y)), L),  write(L) ; true.
+fatherfatherPresenceOfChildrenAndNoFather(L):- cff(FF), FF==1 -> findall((X,Y,1/6),( father2(X,Y)), L),  write(L) ; true.
+
+fathermotherNoFatherNoMother(L):- cfm(FM), FM=1 -> findall((X,Y,1/6),( fatherofthemother(X,Y)), L),  write(L) ; true.
+
+motherofthemotherNoMother(L):- cmmm(MM), MM=1 -> findall((X,Y,1/6),( fatherofthemother(X,Y)), L),  write(L) ; true.
+
+sisterfrombothparentsNoChNoFNoFFNoRB(L):- csbp(RS), C is 3*RS, S=2/C, RS>=2 -> findall((X,Y,S),( sisterfrombothparents(X,Y)), L),  write(L);
+(   csbp(RS), RS==1->
+findall((X,Y,1/2),( sisterfrombothparents(X,Y)), L),  write(L);
+true).
+psisNoChNoFNoFFNoRBNoRSNoPB(L):- cpsiss(PS), C is 3*PS, S=2/C, PS>=2 -> findall((X,Y,S),( psis(X,Y)), L),  write(L);
+(    cpsiss(PS), PS==1-> findall((X,Y,1/2),( psis(X,Y)), L),  write(L);
+true).
+psisWithOnesisterfrombothparents(L):- cpsiss(PS), C is 6*PS, S=1/C, PS>=2 ->
+findall((X,Y,S),( psis(X,Y)), L),  write(L);
+(    cpsiss(PS), PS==1-> findall((X,Y,1/6),( psis(X,Y)), L),  write(L); true).
+
+mbroNoChNoFNoFF(L):- cms(MS), C is 3*MS, S = 1/C, MS >= 2 -> findall((X,Y,S),( mbro(X,Y)), L),  write(L);
+(   cms(MS), MS==1 -> findall((X,Y,1/6),( mbro(X,Y)), L),  write(L);
+true).
+
+msisNoChNoFNoFF(L):- cms(MS), C is 3*MS, S = 1/C, MS >= 2 -> findall((X,Y,S),( msis(X,Y)), L),  write(L);
+(   cms(MS), MS==1 -> findall((X,Y,1/6),( msis(X,Y)), L),  write(L);
+true).
+msisAndbrotherNoChNoFNoFF(L):- cms(MS), C is 3*MS, S = 1/C, MS >= 2 -> findall((X,Y,S),( msis(X,Y); mbro(X,Y)), L),  write(L);
+true.
+maternalsiblingsNoChNoFNoFF(L):-
+cmbros(MB), MB==0 -> msisNoChNoFNoFF(L);
+(cmsiss(MS), MS==0 -> mbroNoChNoFNoFF(L);
+(cmbros(MB), cmsiss(MS), MB>0, MS>0 -> msisAndbrotherNoChNoFNoFF(L))).
+
+sonWithoutDaughter(L) :-
+cs(N), M=2/(3*N),N>=2 -> findall((X,Y,M),( son(X,Y)), L),  write(L), nl
+;
+(   cs(N), N==1-> findall((X,Y,1/2),( son(X,Y)), L),  write(L), nl;
+true).
+oneOrManySonsAndOneOrManySisters :-
+cs(N), cd(D), N==1, D==1 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/2, M, F, N, D),
+findall((X,Y,M),( son(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( daughter(X,Y)), LL),
+write(LL), nl;
+(   cs(N), cd(D), N>1, D>1 ->
+sharesTwoTimesNtoOneTimesNDistributer(2/3, M, F, N, D),
+findall((X,Y,M),( son(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( daughter(X,Y)), LL),
+write(LL), nl
+;   true).
+sswsd(L):- css(N), M= 2/(3*N), N>=2 -> findall((X,Y,M),( son2(X,Y)), L),  write(L), nl;
+(   css(N), N==1-> findall((X,Y ,1/2),( son2(X,Y)), L),  write(L), nl;
+true).
+sswsdWithDaughter(L):- css(N), M= 1/(6*N), N>=2 ->  findall((X,Y,M),( son2(X,Y)), L),  write(L), nl;
+(   css(N), N==1-> findall((X,Y ,1/6),( son2(X,Y)), L),  write(L), nl;
+true). 
+
+
+oneOrManySonSonAndOneOrManysonofthedaughter:-
+css(N), csd(D),cd(DD), N==1, D==1, DD==0 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/2, M, F, N, D),
+findall((X,Y,M),( son2(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( sonofthedaughter(X,Y)), LL),
+write(LL), nl;
+(css(N), csd(D),cd(DD), (  N>1 ; D>1), DD==0 -> sharesTwoTimesNtoOneTimesNDistributer(2/3, M, F, N, D),
+findall((X,Y,M),( son2(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( sonofthedaughter(X,Y)), LL),
+write(LL), nl;
+true).
+oOrMSSandOOMDWD:-
+css(N), csd(D),cd(DD), N>=1, D>=1, DD==1 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/6, M, F, N, D),
+findall((X,Y,M),( son2(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( sonofthedaughter(X,Y)), LL),
+write(LL), nl;
+true.
+sSSwithoutSonsonofthedaughter(L):-
+csss(N),C is 3*N ,M = 2/C, N>=2 ->   
+findall((X,Y,M), ( son3(X,Y)), L),  write(L), nl;
+(     csss(N), N==1 ->
+findall((X,Y,1/2),( son3(X,Y)), L),  write(L), nl ;
+true).
+sSSwithoutSonsonofthedaughterWithsonofthedaughterorDaughter(L):-
+csss(N),C is 6*N ,M = 1/C, N>=2 -> 
+findall((X,Y,M), ( son3(X,Y)), L),  write(L), nl
+;
+(     csss(N), N==1 ->
+findall((X,Y,1/6),( son3(X,Y)), L),  write(L), nl ;
+true).
+oneOrManySSSAndOneOrManySSD:-
+csss(N), cssd(D),csd(sonofthedaughter), cd(Daughter)
+, N==1, D==1, Daughter==0, sonofthedaughter==0 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/2, M, F, N, D),
+findall((X,Y,M),( son3(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( daughterofson2(X,Y)), LL),
+write(LL), nl
+; (   csss(N), cssd(D),csd(sonofthedaughter), cd(Daughter)
+, (   N>1; D>1), Daughter==0, sonofthedaughter==0 ->
+sharesTwoTimesNtoOneTimesNDistributer(2/3, M, F, N, D),
+findall((X,Y,M),( son3(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( daughterofson2(X,Y)), LL),
+write(LL), nl
+; true)
+.
+oneOrManySSSAndOneOrManySSDWithDaughterOrsonofthedaughter:- cd(D), csd(SD),
+csss(N), cssd(SSD), (   D==1; SD==1), N>=1,SSD>=1 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/6, M, F, N, D),
+findall((X,Y,M),( son3(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( daughterofson2(X,Y)), LL),
+write(LL), nl;
+true.
+
+fatherWithNoSon(L):-cf(F), F==1->
+findall((X,Y,"rest"),( father(X,Y)), L), write(L), nl; true.
+fatherfatherWithNoSonOrFather(L):-cff(F), F==1->
+findall((X,Y,"rest"),( father2(X,Y)), L), write(L), nl; true.
+
+brotherfrombothparentsWithNossisterfrombothparents(L) :-  cb2p(RB), csbp(RS),C is 3*RB, S=2/C,  RB>=2, RS==0->
+findall((X,Y,S),( brotherfrombothparents(X,Y)), L),  write(L), nl;
+(    cb2p(RB), csbp(RS), RB==1, RS==0 ->  findall((X,Y,1/2),( brotherfrombothparents(X,Y)), L),  write(L), nl;
+true).
+oneOrManybrotherfrombothparentsWithOneOrManySisters:-
+cb2p(RB), csbp(RS), RB==1, RS==1 ->
+sharesTwoTimesNtoOneTimesNDistributer(1/2, M, F, RB, RS),
+findall((X,Y,M),( brotherfrombothparents(X,Y)), L),  write(L), nl,
+findall((X,Y,F),( sisterfrombothparents(X,Y)), LL),  write(LL), nl;
+(cb2p(RB), csbp(RS), (   RB>1; RS>1) -> sharesTwoTimesNtoOneTimesNDistributer(1/2, M, F, RB, RS),
+findall((X,Y,M),( brotherfrombothparents(X,Y)), L), write(L), nl,
+findall((X,Y,F),( sisterfrombothparents(X,Y)), LL),
+write(LL), nl;
+true).
+getHusband(L):- findall(X, husband(X, _), L).
+getWife(L):- findall(X, wife(X, _), L).
+getSon(L):- findall(X, son(X, _), L).
+create_list(Item, List, [Item|List]).
+table1Distribution(R):-
+R==0 ->
+husband,
+wife, table1Distribution(1);
+( R==1 -> daughter, table1Distribution(2);
+R==2 -> sonofthedaughter, table1Distribution(3);   
+(R==3-> daughterofson2, table1Distribution(4);
+(R==4-> father, table1Distribution(5);
+(R==5-> mother, table1Distribution(6);
+(R==6-> father2, table1Distribution(7);
+(R==7 -> fatherofthemother, table1Distribution(8);
+(R==8 -> motherofthemother, table1Distribution(9);
+(R==9 ->sisterfrombothparents, table1Distribution(10);
+(R==10 -> psis, table1Distribution(11);
+(R==11 -> maternalsibling)))))))))).
+table2Distribution(R) :-
+R==0 ->
+doesOneOrMoreSonExist, table2Distribution(1);
+(R==1 -> doesOneOrMoreSonSonExist, table2Distribution(2) ;
+(R==2 ->   doesOneOrMoreSonSonSonExist , table2Distribution(3);
+(R==3 ->  doesFatherExistWithNoChildren  ,table2Distribution(4);
+(R==4 ->  doesFatherFatherExistWithNoChildrenAndAFather, table2Distribution(5);
+(R==5 ->   doesbrotherfrombothparentsExist;
+true ))))).
+start:-
+table1Distribution(0), nl,
+table2Distribution(0), nl.
+husband :-
+cc(C), C>=1->
+hwc(_);
+hwnc(_).
+wife :-
+cc(C), C>=1->
+wwc(_);
+(   cc(C), C==0->
+wwnc(_) ; true ).
+daughter:-
+cs(N), N==0 ->
+dwns(_)
+;  true.
+sonofthedaughter:-
+cs(N), css(M), cd(P), ( N==0 , M==0, P==0) ->
+sdwsdss(_);
+(cs(N), css(M), cd(P), ( N==0, M==0, P==1) ->
+sonofthedaughterWithoutDaughterOnly(_) ; true).
+daughterofson2:-
+cs(N), css(M), cd(P), csss(W), csd(K)
+, ( N==0 , M==0, P==0,K==0,W==0) -> sSDwithoutSDSSSDSSS(_);
+( cs(N), css(M), cd(P), csss(W), csd(K),
+( N==0 , M==0, (P==1;K==1),W==0) -> sSDwithDaughterOrsonofthedaughter(_); true
+).
+father:-
+cc(N), N>0 ->
+fatherWithChildren(_);
+true.
+mother :- cc(C),
+csi(S), ch(H), cf(F),
+(   C>0; S>0; (   H==1, F==1))->  motherWithChildrenOrSiblingsOrHusbandplusFather(_);
+(   cw(W), cf(F), W==1, F==1 ->  motherWithWifePlusFather(_);
+motherThirdCase(_), true).
+father2 :- cc(C), cf(F), C>0, F==0 ->
+fatherfatherPresenceOfChildrenAndNoFather(_) ; true.
+fatherofthemother :- cf(F), cm(M), F==0, M==0 ->
+fathermotherNoFatherNoMother(_);
+true.
+motherofthemother :- cm(M), M==0 ->
+motherofthemotherNoMother(_);
+true.
+sisterfrombothparents:- cf(F),cff(FF),
+cb2p(RB), cc(C), F==0, FF==0, RB==0, C==0 ->
+sisterfrombothparentsNoChNoFNoFFNoRB(_);
+true.
+psis:- cf(F),cff(FF),
+cb2p(RB), cc(C),
+cpbros(PB), csbp(RS),
+F==0, FF==0, RB==0, C==0,PB==0, RS==0 ->
+psisNoChNoFNoFFNoRBNoRSNoPB(_);
+(   cf(F),cff(FF),
+cb2p(RB), cc(C),
+cpbros(PB), csbp(RS),
+F==0, FF==0, RB==0, C==0,PB==0, RS==1 ->
+psisWithOnesisterfrombothparents(_);
+true).
+maternalsibling :- cf(F),cff(FF), cc(C),
+F==0, FF==0, C==0 -> maternalsiblingsNoChNoFNoFF(_) ; true.
+doesOneOrMoreSonExist :- cs(S), cd(D), S==1, D==0 ->
+sonWithoutDaughter(_);(   cs(S), cd(D), S>0, D>0 -> oneOrManySonsAndOneOrManySisters;
+true).
+doesOneOrMoreSonSonExist :-
+csd(SD), cd(D), SD==0, D==0 ->   sswsd(_);
+(  csd(SD), cd(D), SD==0, D==1 ->
+sswsdWithDaughter(_);
+(   csd(SD), cd(D), SD>0, D==0 ->
+oneOrManySonSonAndOneOrManysonofthedaughter;
+(   csd(SD), cd(D), SD>0, D==1 ->
+oOrMSSandOOMDWD; true))).
+doesOneOrMoreSonSonSonExist :-
+cssd(SSD),csd(SD), cd(D), SD==0, D==0 , SSD==0->
+sSSwithoutSonsonofthedaughter(_);
+(   cssd(SSD),csd(SD), cd(D),(    SD==1; D==1), SSD==0 ->
+sSSwithoutSonsonofthedaughterWithsonofthedaughterorDaughter(_);
+(    cssd(SSD),csd(SD), cd(D), SSD>0, D==0, SD==0 ->
+oneOrManySSSAndOneOrManySSD;
+(   cssd(SSD),csd(SD), cd(D), SSD>0, (   D==1; SD==1) ->
+oneOrManySSSAndOneOrManySSDWithDaughterOrsonofthedaughter; true))).
+doesFatherExistWithNoChildren:-
+cc(Ch), Ch==0 -> fatherWithNoSon(_) ; true.
+doesFatherFatherExistWithNoChildrenAndAFather:- cc(Ch),
+cf(F), Ch==0, F==1->  fatherfatherWithNoSonOrFather(_); true.
+doesbrotherfrombothparentsExist:- csbp(RS), RS ==0 ->brotherfrombothparentsWithNossisterfrombothparents(_);
+(   csbp(RS) , cb2p(RB), RB>0, RS>0 ->
+oneOrManybrotherfrombothparentsWithOneOrManySisters;
+true).
